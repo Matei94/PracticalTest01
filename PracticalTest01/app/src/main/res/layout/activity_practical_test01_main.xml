@@ -9,8 +9,101 @@
     android:paddingTop="@dimen/activity_vertical_margin"
     tools:context="practicaltest01.eim.systems.cs.pub.ro.practicaltest01.PracticalTest01MainActivity">
 
+
+    <Button
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="New Button"
+        android:id="@+id/button"
+        android:layout_alignParentTop="true"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentStart="true"
+        android:layout_alignParentRight="true"
+        android:layout_alignParentEnd="true" />
+
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Hello World!" />
+        android:text="New Text"
+        android:id="@+id/fakeView"
+        android:width="0dp"
+        android:height="0dp"
+        android:layout_below="@+id/button"
+        android:layout_centerHorizontal="true" />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="New Text"
+        android:id="@+id/textView2"
+        android:layout_below="@+id/button"
+        android:layout_alignParentLeft="true"
+        android:gravity="center"
+        android:layout_toLeftOf="@+id/fakeView"
+        android:layout_toStartOf="@+id/fakeView" />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="New Text"
+        android:id="@+id/textView3"
+        android:layout_below="@+id/button"
+        android:layout_alignParentRight="true"
+        android:gravity="center"
+        android:layout_toRightOf="@+id/fakeView"
+        android:layout_toEndOf="@+id/fakeView"
+        android:enabled="true" />
+
+    <Button
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="New Button"
+        android:id="@+id/button2"
+        android:layout_below="@+id/textView2"
+        android:layout_alignParentLeft="true"
+        android:layout_alignRight="@+id/fakeView"
+        android:layout_alignEnd="@+id/fakeView" />
+
+    <Button
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="New Button"
+        android:id="@+id/button3"
+        android:layout_alignParentRight="true"
+        android:layout_below="@+id/textView2"
+        android:layout_alignLeft="@+id/fakeView"
+        android:layout_alignStart="@+id/fakeView" />
+
+    <LinearLayout
+        android:orientation="horizontal"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_below="@+id/button2"
+        android:layout_alignParentLeft="true"
+        android:weightSum="4"
+        android:layout_alignParentStart="true">
+
+        <Button
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="2"
+            android:text="A"
+            android:id="@+id/button4" />
+
+        <Button
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:text="B"
+            android:layout_weight="1"
+            android:id="@+id/button5" />
+
+        <Button
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:text="C"
+            android:layout_weight="1"
+            android:id="@+id/button6" />
+
+
+    </LinearLayout>
 </RelativeLayout>

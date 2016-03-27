@@ -10,12 +10,15 @@ import java.util.Date;
  */
 public class ProcessingThread extends Thread {
     private Context context;
-    private Intent intent;
     private boolean keepRunning = true;
+    private int leftValue;
+    private int rightValue;
 
     public ProcessingThread(Context context, Intent intent) {
         this.context = context;
-        this.intent = intent;
+
+        leftValue  = intent.getIntExtra("leftValue", 0);
+        rightValue = intent.getIntExtra("rightValue", 0);
     }
 
     public void stopThread() {
@@ -25,19 +28,16 @@ public class ProcessingThread extends Thread {
     @Override
     public void run() {
         while (keepRunning) {
-            int leftValue  = intent.getIntExtra("leftValue", 0);
-            int rightValue = intent.getIntExtra("rightValue", 0);
-
             Intent i1 = new Intent();
-            i1.setAction("action_time");
+            i1.setAction(Constants.ACTION_1);
             i1.putExtra("time", new Date().toString());
 
             Intent i2 = new Intent();
-            i2.setAction("action_arithmetic");
+            i2.setAction(Constants.ACTION_2);
             i2.putExtra("arithmetic", leftValue + rightValue);
 
             Intent i3 = new Intent();
-            i3.setAction("action_geometric");
+            i3.setAction(Constants.ACTION_3);
             i3.putExtra("geometric", leftValue - rightValue);
 
             context.sendBroadcast(i1);

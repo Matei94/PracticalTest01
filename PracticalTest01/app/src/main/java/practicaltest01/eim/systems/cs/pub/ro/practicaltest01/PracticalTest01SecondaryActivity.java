@@ -30,11 +30,19 @@ public class PracticalTest01SecondaryActivity extends AppCompatActivity {
 
     private ButtonClickListener buttonClickListener = new ButtonClickListener();
 
+    private Button backButton = null;
+
+    private void initGraphics() {
+        backButton = (Button) findViewById(R.id.backButton);
+
+        backButton.setOnClickListener(buttonClickListener);
+    }
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_practical_test01_secondary);
 
-        ((Button) findViewById(R.id.backButton)).setOnClickListener(buttonClickListener);
+        initGraphics();
     }
 }

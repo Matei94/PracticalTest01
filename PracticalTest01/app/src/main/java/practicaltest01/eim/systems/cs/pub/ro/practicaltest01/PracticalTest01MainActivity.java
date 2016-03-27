@@ -1,6 +1,5 @@
 package practicaltest01.eim.systems.cs.pub.ro.practicaltest01;
 
-import android.content.ComponentName;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.os.PersistableBundle;
@@ -32,12 +31,10 @@ public class PracticalTest01MainActivity extends AppCompatActivity {
                     textView2.setText(String.valueOf(rightValue + 1));
                     break;
                 case R.id.button4:
-                    Log.d("MATEI", "button4 pressed");
                     if (serviceIntent == null) {
-                        Log.d("MATEI", "serviceStarted");
                         serviceIntent = new Intent(getApplicationContext(), PracticalTest01Service.class);
-                        serviceIntent.putExtra("leftValue", 7);
-                        serviceIntent.putExtra("rightValue", 3);
+                        serviceIntent.putExtra("leftValue",  Integer.parseInt(textView.getText().toString()));
+                        serviceIntent.putExtra("rightValue", Integer.parseInt(textView2.getText().toString()));
                         startService(serviceIntent);
                     }
                     break;
@@ -49,35 +46,38 @@ public class PracticalTest01MainActivity extends AppCompatActivity {
 
     private ButtonClickListener buttonClickListener = new ButtonClickListener();
 
-    private Button button = null;
+    private Button button  = null;
     private Button button2 = null;
     private Button button3 = null;
     private Button button4 = null;
-    private TextView textView = null;
+    private TextView textView  = null;
     private TextView textView2 = null;
 
     private IntentFilter intentFilter;
     private PracticalTest01BroadcastReceiver broadcastReceiver;
     private Intent serviceIntent = null;
 
-    @Override
-    protected void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_practical_test01_main);
-
+    private void initGraphics() {
         button  = (Button) findViewById(R.id.button);
         button2 = (Button) findViewById(R.id.button2);
         button3 = (Button) findViewById(R.id.button3);
         button4 = (Button) findViewById(R.id.button4);
 
-        textView = (TextView) findViewById(R.id.textView);
+        textView  = (TextView) findViewById(R.id.textView);
         textView2 = (TextView) findViewById(R.id.textView2);
 
         button.setOnClickListener(buttonClickListener);
         button2.setOnClickListener(buttonClickListener);
         button3.setOnClickListener(buttonClickListener);
         button4.setOnClickListener(buttonClickListener);
+    }
 
+    @Override
+    protected void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        setContentView(R.layout.activity_practical_test01_main);
+
+        initGraphics();
 
         if (savedInstanceState != null) {
             if (savedInstanceState.containsKey("leftCount")) {
@@ -96,9 +96,9 @@ public class PracticalTest01MainActivity extends AppCompatActivity {
         broadcastReceiver = new PracticalTest01BroadcastReceiver();
 
         intentFilter = new IntentFilter();
-        intentFilter.addAction("action_time");
-        intentFilter.addAction("action_arithmetic");
-        intentFilter.addAction("action_geometric");
+        intentFilter.addAction(Constants.ACTION_1);
+        intentFilter.addAction(Constants.ACTION_2);
+        intentFilter.addAction(Constants.ACTION_3);
 
         Log.d("MATEI", "onCreate");
     }
@@ -184,13 +184,9 @@ public class PracticalTest01MainActivity extends AppCompatActivity {
 
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
-        Log.d("MATEI", "onActivityResult");
-
         switch (requestCode) {
             case Constants.SECOND_ACTIVITY_REQUEST_CODE:
-                Log.d("MATEI", "onActivityResult 1");
                 if (resultCode == RESULT_OK) {
-                    Log.d("MATEI", "onActivityResult 2");
                     Bundle dataFromChild = data.getExtras();
                     Toast.makeText(this, dataFromChild.getString("toparent"), Toast.LENGTH_LONG).show();
                 }

@@ -34,8 +34,8 @@
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="New Text"
-        android:id="@+id/textView2"
+        android:text="0"
+        android:id="@+id/textView"
         android:layout_below="@+id/button"
         android:layout_alignParentLeft="true"
         android:gravity="center"
@@ -45,8 +45,8 @@
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="New Text"
-        android:id="@+id/textView3"
+        android:text="0"
+        android:id="@+id/textView2"
         android:layout_below="@+id/button"
         android:layout_alignParentRight="true"
         android:gravity="center"
@@ -59,7 +59,7 @@
         android:layout_height="wrap_content"
         android:text="New Button"
         android:id="@+id/button2"
-        android:layout_below="@+id/textView2"
+        android:layout_below="@+id/textView"
         android:layout_alignParentLeft="true"
         android:layout_alignRight="@+id/fakeView"
         android:layout_alignEnd="@+id/fakeView" />

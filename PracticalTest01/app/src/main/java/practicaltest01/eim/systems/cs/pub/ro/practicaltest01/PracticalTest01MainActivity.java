@@ -7,6 +7,7 @@ import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
+import android.widget.TextView;
 import android.widget.Toast;
 
 public class PracticalTest01MainActivity extends AppCompatActivity {
@@ -20,6 +21,14 @@ public class PracticalTest01MainActivity extends AppCompatActivity {
                     intent.putExtra("tochild", "magic");
                     startActivityForResult(intent, Constants.SECOND_ACTIVITY_REQUEST_CODE);
                     break;
+                case R.id.button2:
+                    int leftValue = Integer.parseInt(textView.getText().toString());
+                    textView.setText(String.valueOf(leftValue + 1));
+                    break;
+                case R.id.button3:
+                    int rightValue = Integer.parseInt(textView2.getText().toString());
+                    textView2.setText(String.valueOf(rightValue + 1));
+                    break;
                 default:
                     Log.d("MATEI", "Invalid view id: " + v.getId());
             }
@@ -28,12 +37,41 @@ public class PracticalTest01MainActivity extends AppCompatActivity {
 
     private ButtonClickListener buttonClickListener = new ButtonClickListener();
 
+    private Button button = null;
+    private Button button2 = null;
+    private Button button3 = null;
+    private TextView textView = null;
+    private TextView textView2 = null;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_practical_test01_main);
 
-        ((Button) findViewById(R.id.button)).setOnClickListener(buttonClickListener);
+        button  = (Button) findViewById(R.id.button);
+        button2 = (Button) findViewById(R.id.button2);
+        button3 = (Button) findViewById(R.id.button3);
+
+        textView = (TextView) findViewById(R.id.textView);
+        textView2 = (TextView) findViewById(R.id.textView2);
+
+        button.setOnClickListener(buttonClickListener);
+        button2.setOnClickListener(buttonClickListener);
+        button3.setOnClickListener(buttonClickListener);
+
+        if (savedInstanceState != null) {
+            if (savedInstanceState.containsKey("leftCount")) {
+                textView.setText(savedInstanceState.getString("leftCount"));
+            } else {
+                textView.setText("0");
+            }
+
+            if (savedInstanceState.containsKey("rightCount")) {
+                textView2.setText(savedInstanceState.getString("rightCount"));
+            } else {
+                textView2.setText("0");
+            }
+        }
 
         Log.d("MATEI", "onCreate");
     }
@@ -77,12 +115,29 @@ public class PracticalTest01MainActivity extends AppCompatActivity {
     protected void onSaveInstanceState(Bundle outState) {
         super.onSaveInstanceState(outState);
 
+        outState.putString("leftCount", textView.getText().toString());
+        outState.putString("rightCount", textView2.getText().toString());
+
         Log.d("MATEI", "onSaveInstanceState");
     }
 
     @Override
     protected void onRestoreInstanceState(Bundle savedInstanceState) {
         super.onRestoreInstanceState(savedInstanceState);
+
+        if (savedInstanceState != null) {
+            if (savedInstanceState.containsKey("leftCount")) {
+                textView.setText(savedInstanceState.getString("leftCount"));
+            } else {
+                textView.setText("0");
+            }
+
+            if (savedInstanceState.containsKey("rightCount")) {
+                textView2.setText(savedInstanceState.getString("rightCount"));
+            } else {
+                textView2.setText("0");
+            }
+        }
 
         Log.d("MATEI", "onRestoreInstanceState");
     }

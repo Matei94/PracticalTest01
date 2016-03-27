@@ -1,6 +1,8 @@
 package practicaltest01.eim.systems.cs.pub.ro.practicaltest01;
 
+import android.content.ComponentName;
 import android.content.Intent;
+import android.content.IntentFilter;
 import android.os.PersistableBundle;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -29,6 +31,16 @@ public class PracticalTest01MainActivity extends AppCompatActivity {
                     int rightValue = Integer.parseInt(textView2.getText().toString());
                     textView2.setText(String.valueOf(rightValue + 1));
                     break;
+                case R.id.button4:
+                    Log.d("MATEI", "button4 pressed");
+                    if (serviceIntent == null) {
+                        Log.d("MATEI", "serviceStarted");
+                        serviceIntent = new Intent(getApplicationContext(), PracticalTest01Service.class);
+                        serviceIntent.putExtra("leftValue", 7);
+                        serviceIntent.putExtra("rightValue", 3);
+                        startService(serviceIntent);
+                    }
+                    break;
                 default:
                     Log.d("MATEI", "Invalid view id: " + v.getId());
             }
@@ -40,8 +52,13 @@ public class PracticalTest01MainActivity extends AppCompatActivity {
     private Button button = null;
     private Button button2 = null;
     private Button button3 = null;
+    private Button button4 = null;
     private TextView textView = null;
     private TextView textView2 = null;
+
+    private IntentFilter intentFilter;
+    private PracticalTest01BroadcastReceiver broadcastReceiver;
+    private Intent serviceIntent = null;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -51,6 +68,7 @@ public class PracticalTest01MainActivity extends AppCompatActivity {
         button  = (Button) findViewById(R.id.button);
         button2 = (Button) findViewById(R.id.button2);
         button3 = (Button) findViewById(R.id.button3);
+        button4 = (Button) findViewById(R.id.button4);
 
         textView = (TextView) findViewById(R.id.textView);
         textView2 = (TextView) findViewById(R.id.textView2);
@@ -58,6 +76,8 @@ public class PracticalTest01MainActivity extends AppCompatActivity {
         button.setOnClickListener(buttonClickListener);
         button2.setOnClickListener(buttonClickListener);
         button3.setOnClickListener(buttonClickListener);
+        button4.setOnClickListener(buttonClickListener);
+
 
         if (savedInstanceState != null) {
             if (savedInstanceState.containsKey("leftCount")) {
@@ -73,6 +93,13 @@ public class PracticalTest01MainActivity extends AppCompatActivity {
             }
         }
 
+        broadcastReceiver = new PracticalTest01BroadcastReceiver();
+
+        intentFilter = new IntentFilter();
+        intentFilter.addAction("action_time");
+        intentFilter.addAction("action_arithmetic");
+        intentFilter.addAction("action_geometric");
+
         Log.d("MATEI", "onCreate");
     }
 
@@ -87,7 +114,18 @@ public class PracticalTest01MainActivity extends AppCompatActivity {
     protected void onResume() {
         super.onResume();
 
+        registerReceiver(broadcastReceiver, intentFilter);
+
         Log.d("MATEI", "onResume");
+    }
+
+    @Override
+    protected void onPause() {
+        super.onPause();
+
+        Log.d("MATEI", "onPause");
+
+        unregisterReceiver(broadcastReceiver);
     }
 
     @Override
@@ -99,9 +137,11 @@ public class PracticalTest01MainActivity extends AppCompatActivity {
 
     @Override
     protected void onDestroy() {
-        super.onDestroy();
-
+        if (serviceIntent != null) {
+            stopService(serviceIntent);
+        }
         Log.d("MATEI", "onDestroy");
+        super.onDestroy();
     }
 
     @Override

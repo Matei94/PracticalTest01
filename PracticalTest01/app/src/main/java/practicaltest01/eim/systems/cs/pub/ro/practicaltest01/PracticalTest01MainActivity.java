@@ -8,6 +8,7 @@ import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
+import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -17,27 +18,34 @@ public class PracticalTest01MainActivity extends AppCompatActivity {
         @Override
         public void onClick(View v) {
             switch (v.getId()) {
-                case R.id.button:
-                    Intent intent = new Intent(getApplicationContext(), PracticalTest01SecondaryActivity.class);
-                    intent.putExtra("tochild", "magic");
-                    startActivityForResult(intent, Constants.SECOND_ACTIVITY_REQUEST_CODE);
-                    break;
-                case R.id.button2:
-                    int leftValue = Integer.parseInt(textView.getText().toString());
-                    textView.setText(String.valueOf(leftValue + 1));
-                    break;
-                case R.id.button3:
-                    int rightValue = Integer.parseInt(textView2.getText().toString());
-                    textView2.setText(String.valueOf(rightValue + 1));
-                    break;
-                case R.id.button4:
-                    if (serviceIntent == null) {
-                        serviceIntent = new Intent(getApplicationContext(), PracticalTest01Service.class);
-                        serviceIntent.putExtra("leftValue",  Integer.parseInt(textView.getText().toString()));
-                        serviceIntent.putExtra("rightValue", Integer.parseInt(textView2.getText().toString()));
-                        startService(serviceIntent);
+                case R.id.setButton:
+                    Log.d("MATEI", et00.getText().toString());
+                    if (et00.getText().toString().equals("") ||
+                            et01.getText().toString().equals("") ||
+                            et10.getText().toString().equals("") ||
+                            et11.getText().toString().equals("")) {
+                        Toast.makeText(getApplicationContext(), "Enter all numbers", Toast.LENGTH_LONG).show();
+                        break;
                     }
+
+
+                    Intent intent = new Intent(getApplicationContext(), PracticalTest01SecondaryActivity.class);
+                    intent.putExtra("et00", Integer.valueOf(et00.getText().toString()));
+                    intent.putExtra("et01", Integer.valueOf(et01.getText().toString()));
+                    intent.putExtra("et10", Integer.valueOf(et10.getText().toString()));
+                    intent.putExtra("et11", Integer.valueOf(et11.getText().toString()));
+//                  startActivityForResult(intent, Constants.SECOND_ACTIVITY_REQUEST_CODE);
+                    startActivity(intent);
+
                     break;
+//                case R.id.button4:
+//                    if (serviceIntent == null) {
+//                        serviceIntent = new Intent(getApplicationContext(), PracticalTest01Service.class);
+//                        serviceIntent.putExtra("leftValue",  Integer.parseInt(textView.getText().toString()));
+//                        serviceIntent.putExtra("rightValue", Integer.parseInt(textView2.getText().toString()));
+//                        startService(serviceIntent);
+//                    }
+//                    break;
                 default:
                     Log.d("MATEI", "Invalid view id: " + v.getId());
             }
@@ -46,30 +54,24 @@ public class PracticalTest01MainActivity extends AppCompatActivity {
 
     private ButtonClickListener buttonClickListener = new ButtonClickListener();
 
-    private Button button  = null;
-    private Button button2 = null;
-    private Button button3 = null;
-    private Button button4 = null;
-    private TextView textView  = null;
-    private TextView textView2 = null;
+    private EditText et00 = null;
+    private EditText et01 = null;
+    private EditText et10 = null;
+    private EditText et11 = null;
+    private Button setButton = null;
 
     private IntentFilter intentFilter;
     private PracticalTest01BroadcastReceiver broadcastReceiver;
     private Intent serviceIntent = null;
 
     private void initGraphics() {
-        button  = (Button) findViewById(R.id.button);
-        button2 = (Button) findViewById(R.id.button2);
-        button3 = (Button) findViewById(R.id.button3);
-        button4 = (Button) findViewById(R.id.button4);
+        et00 = (EditText) findViewById(R.id.et00);
+        et01 = (EditText) findViewById(R.id.et01);
+        et10 = (EditText) findViewById(R.id.et10);
+        et11 = (EditText) findViewById(R.id.et11);
+        setButton = (Button) findViewById(R.id.setButton);
 
-        textView  = (TextView) findViewById(R.id.textView);
-        textView2 = (TextView) findViewById(R.id.textView2);
-
-        button.setOnClickListener(buttonClickListener);
-        button2.setOnClickListener(buttonClickListener);
-        button3.setOnClickListener(buttonClickListener);
-        button4.setOnClickListener(buttonClickListener);
+        setButton.setOnClickListener(buttonClickListener);
     }
 
     @Override
@@ -80,25 +82,35 @@ public class PracticalTest01MainActivity extends AppCompatActivity {
         initGraphics();
 
         if (savedInstanceState != null) {
-            if (savedInstanceState.containsKey("leftCount")) {
-                textView.setText(savedInstanceState.getString("leftCount"));
+            if (savedInstanceState.containsKey("et00")) {
+                et00.setText(savedInstanceState.getString("et00"));
             } else {
-                textView.setText("0");
+                et00.setText("0");
             }
-
-            if (savedInstanceState.containsKey("rightCount")) {
-                textView2.setText(savedInstanceState.getString("rightCount"));
+            if (savedInstanceState.containsKey("et01")) {
+                et01.setText(savedInstanceState.getString("et01"));
             } else {
-                textView2.setText("0");
+                et01.setText("0");
+            }
+            if (savedInstanceState.containsKey("et10")) {
+                et10.setText(savedInstanceState.getString("et10"));
+            } else {
+                et10.setText("0");
+            }
+            if (savedInstanceState.containsKey("et11")) {
+                et11.setText(savedInstanceState.getString("et11"));
+            } else {
+                et11.setText("0");
             }
         }
 
-        broadcastReceiver = new PracticalTest01BroadcastReceiver();
+        broadcastReceiver = new PracticalTest01BroadcastReceiver(et00, et01, et10, et11);
 
         intentFilter = new IntentFilter();
         intentFilter.addAction(Constants.ACTION_1);
-        intentFilter.addAction(Constants.ACTION_2);
-        intentFilter.addAction(Constants.ACTION_3);
+
+        serviceIntent = new Intent(getApplicationContext(), PracticalTest01Service.class);
+        startService(serviceIntent);
 
         Log.d("MATEI", "onCreate");
     }
@@ -155,8 +167,10 @@ public class PracticalTest01MainActivity extends AppCompatActivity {
     protected void onSaveInstanceState(Bundle outState) {
         super.onSaveInstanceState(outState);
 
-        outState.putString("leftCount", textView.getText().toString());
-        outState.putString("rightCount", textView2.getText().toString());
+        outState.putString("et00", et00.getText().toString());
+        outState.putString("et01", et01.getText().toString());
+        outState.putString("et10", et10.getText().toString());
+        outState.putString("et11", et11.getText().toString());
 
         Log.d("MATEI", "onSaveInstanceState");
     }
@@ -166,16 +180,25 @@ public class PracticalTest01MainActivity extends AppCompatActivity {
         super.onRestoreInstanceState(savedInstanceState);
 
         if (savedInstanceState != null) {
-            if (savedInstanceState.containsKey("leftCount")) {
-                textView.setText(savedInstanceState.getString("leftCount"));
+            if (savedInstanceState.containsKey("et00")) {
+                et00.setText(savedInstanceState.getString("et00"));
             } else {
-                textView.setText("0");
+                et00.setText("0");
             }
-
-            if (savedInstanceState.containsKey("rightCount")) {
-                textView2.setText(savedInstanceState.getString("rightCount"));
+            if (savedInstanceState.containsKey("et01")) {
+                et01.setText(savedInstanceState.getString("et01"));
             } else {
-                textView2.setText("0");
+                et01.setText("0");
+            }
+            if (savedInstanceState.containsKey("et10")) {
+                et10.setText(savedInstanceState.getString("et10"));
+            } else {
+                et10.setText("0");
+            }
+            if (savedInstanceState.containsKey("et11")) {
+                et11.setText(savedInstanceState.getString("et11"));
+            } else {
+                et11.setText("0");
             }
         }
 

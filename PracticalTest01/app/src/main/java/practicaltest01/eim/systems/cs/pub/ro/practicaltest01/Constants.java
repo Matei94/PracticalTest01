@@ -5,7 +5,7 @@ package practicaltest01.eim.systems.cs.pub.ro.practicaltest01;
  */
 public class Constants {
     public final static int SECOND_ACTIVITY_REQUEST_CODE = 42;
-    public final static int SLEEP_TIME = 3000;
+    public final static int SLEEP_TIME = 10000;
 
     public final static String ACTION_1 = "action_time";
     public final static String ACTION_2 = "action_arithmetic";
